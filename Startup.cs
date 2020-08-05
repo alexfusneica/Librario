@@ -16,6 +16,10 @@ namespace Project1
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(options => 
+            {
+                options.EnableEndpointRouting = false;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -27,15 +31,10 @@ namespace Project1
             }
 
             app.UseStaticFiles();
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
+            // app.UseMvcWithDefaultRoute();
+            app.UseMvc(routeBuilder =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    string nome = context.Request.Query["nome"];
-                    await context.Response.WriteAsync($"Hello !");
-                });
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
